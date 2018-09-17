@@ -18,7 +18,7 @@ const database = {
 			id: '124',
 			name: 'sal',
 			email: 'sal@gmail.com',
-			password: 'germ',
+			password: 'bananas',
 			entries: 0,
 			joined: new Date()
 		}
@@ -26,15 +26,16 @@ const database = {
 }
 
 app.get('/', (req, res) => {
-	res.json(database.users);
+	res.json('it is working');
 })
 
 app.post('/signin', (req, res) => {
 	if (req.body.email === database.users[0].email &&
-		req.body.password === database.users[0].password) {
-	res.json('success ... success')
+		req.body.password === database.users[0].password
+		) {
+		res.json('success ...');		
 	} else {
-		res.status(404).json('error loggin in...');
+		res.status(400).json('error loggin in');
 	}
 })
 
@@ -47,8 +48,36 @@ app.post('/register', (req, res) => {
 		password: password,
 		entries: 0,
 		joined: new Date()
-	})
+	});
 	res.json(database.users[database.users.length-1]);
+})
+
+app.get('/profile/:id', (req, res) => {
+	const { id } = req.params;
+	let found = false;
+	database.users.forEach(user => {
+		if (user.id === id) {
+			found = true;
+			return res.json(user)
+		}
+	});
+	if (!found) {
+		res.status(400).json('not found');
+	}
+})
+
+app.put('/image', (req, res) => {
+	const { id } = req.body;
+	let found = false;
+	database.users.forEach(user => {
+		if (user.id === id) {
+			user.entries++;
+			res.json(user.entries);
+	}})
+	if (!found) {
+		res.status(400).json('error');
+	}
+	
 })
 
 app.listen(3030, () => {
