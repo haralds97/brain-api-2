@@ -30,12 +30,12 @@ app.get('/', (req, res) => {
 })
 
 app.post('/signin', (req, res) => {
-	if (req.body.email === database.users[0].email &&
-		req.body.password === database.users[0].password
-		) {
-		res.json('success ...');		
+	if (req.body.password === database.users[0].password &&
+		req.body.email === database.users[0].email
+	) {
+		res.json('success');
 	} else {
-		res.status(400).json('error loggin in');
+		res.status(400).json('failed!!');
 	}
 })
 
@@ -58,7 +58,7 @@ app.get('/profile/:id', (req, res) => {
 	database.users.forEach(user => {
 		if (user.id === id) {
 			found = true;
-			return res.json(user)
+			return res.json(user);
 		}
 	});
 	if (!found) {
@@ -71,13 +71,14 @@ app.put('/image', (req, res) => {
 	let found = false;
 	database.users.forEach(user => {
 		if (user.id === id) {
+			found = true;
 			user.entries++;
-			res.json(user.entries);
-	}})
+			return res.json(user.entries);
+		}
+	});
 	if (!found) {
-		res.status(400).json('error');
+		res.status(400).json('not found');
 	}
-	
 })
 
 app.listen(3030, () => {
