@@ -4,7 +4,7 @@ const cors = require('cors');
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors);
 
 const database = {
 	users: [
@@ -25,19 +25,18 @@ const database = {
 			joined: new Date()
 		}
 	]
-};
+}
 
 app.get('/', (req, res) => {
-	res.json(database.users);
+	res.json('it is working');
 })
 
 app.post('/signin', (req, res) => {
-	if (req.body.password === database.users[0].password &&
-		req.body.email === database.users[0].email
-	) {
-		res.json('success');
+	if (req.body.email === database.users[0].email &&
+		req.body.password === database.users[0].password) {
+		res.json('signing in');
 	} else {
-		res.status(400).json('failed!!');
+		res.status(400).json('error signing in');
 	}
 })
 
@@ -51,20 +50,20 @@ app.post('/register', (req, res) => {
 		entries: 0,
 		joined: new Date()
 	});
-	res.json(database.users[database.users.length-1]);
+		res.json(database.users[database.users.length-1]);
 })
 
-app.get('/profile/:id', (req, res) => {
+app.get('/profile/:id', (req,res) => {
 	const { id } = req.params;
 	let found = false;
 	database.users.forEach(user => {
-		if (user.id === id) {
+		if (id === user.id) {
 			found = true;
-			return res.json(user);
+			res.json(user)
 		}
 	});
 	if (!found) {
-		res.status(400).json('not found');
+		res.status(404).json('no foundee');
 	}
 })
 
@@ -75,7 +74,7 @@ app.put('/image', (req, res) => {
 		if (user.id === id) {
 			found = true;
 			user.entries++;
-			return res.json(user.entries);
+			res.json(`${user.name}: ${user.entries} entries`);
 		}
 	});
 	if (!found) {
