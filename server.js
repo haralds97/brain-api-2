@@ -4,7 +4,7 @@ const cors = require('cors');
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors);
+app.use(cors());
 
 const database = {
 	users: [
@@ -28,13 +28,13 @@ const database = {
 }
 
 app.get('/', (req, res) => {
-	res.json('it is working');
+	res.json(database.users);
 })
 
 app.post('/signin', (req, res) => {
 	if (req.body.email === database.users[0].email &&
 		req.body.password === database.users[0].password) {
-		res.json('signing in');
+	res.json(database.users[0]);
 	} else {
 		res.status(400).json('error signing in');
 	}
@@ -59,7 +59,7 @@ app.get('/profile/:id', (req,res) => {
 	database.users.forEach(user => {
 		if (id === user.id) {
 			found = true;
-			res.json(user)
+			res.json(user);
 		}
 	});
 	if (!found) {
@@ -74,7 +74,7 @@ app.put('/image', (req, res) => {
 		if (user.id === id) {
 			found = true;
 			user.entries++;
-			res.json(`${user.name}: ${user.entries} entries`);
+			res.json(`${user.entries}`);
 		}
 	});
 	if (!found) {
