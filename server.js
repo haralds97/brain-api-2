@@ -1,10 +1,23 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const knex = require('knex');
+
+const db = knex({
+  client: 'pg',
+  connection: {
+    host : '127.0.0.1',
+    user : 'postgres',
+    password : '',
+    database : 'smartbrain'
+  }
+});
+
+
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors()); 
 
 const database = {
 	users: [
@@ -20,7 +33,7 @@ const database = {
 			id: '124',
 			name: 'sal',
 			email: 'sal@gmail.com',
-			password: 'bananas',
+			password: 'apples',
 			entries: 0,
 			joined: new Date()
 		}
@@ -34,36 +47,38 @@ app.get('/', (req, res) => {
 app.post('/signin', (req, res) => {
 	if (req.body.email === database.users[0].email &&
 		req.body.password === database.users[0].password) {
-	res.json(database.users[0]);
+			res.json('signing in');
 	} else {
-		res.status(400).json('error signing in');
+		res.status(400).json('error logging in');
 	}
 })
 
 app.post('/register', (req, res) => {
 	const { name, email, password } = req.body;
-	database.users.push({
-		id: '125',
-		name: name,
-		email: email,
-		password: password,
-		entries: 0,
-		joined: new Date()
-	});
-		res.json(database.users[database.users.length-1]);
+	db('users')
+		.returning('*')
+		.insert({
+			email: email,
+			name: name,
+			joined: new Date()
+		})
+	  .then(user => {
+		res.json(user[0]);
+	  })
+	  .catch(err => res.status(400).json('unable to register'));
 })
 
-app.get('/profile/:id', (req,res) => {
+app.get('/profile/:id', (req, res) => {
 	const { id } = req.params;
 	let found = false;
 	database.users.forEach(user => {
-		if (id === user.id) {
+		if (user.id === id) {
 			found = true;
-			res.json(user);
+			return res.json(user);
 		}
 	});
 	if (!found) {
-		res.status(404).json('no foundee');
+		res.status(400).json('not found');
 	}
 })
 
@@ -74,12 +89,12 @@ app.put('/image', (req, res) => {
 		if (user.id === id) {
 			found = true;
 			user.entries++;
-			res.json(`${user.entries}`);
+			return res.json(user.entries);
 		}
 	});
 	if (!found) {
 		res.status(400).json('not found');
-	}
+	}	
 })
 
 app.listen(3030, () => {
