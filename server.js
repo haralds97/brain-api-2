@@ -115,7 +115,6 @@ app.put('/image', (req, res) => {
 			res.json(entries[0]);
 		})
 	.catch(err => res.status(400).json('problem updating entries'))
-
 })
 
 app.listen(3030, () => {
