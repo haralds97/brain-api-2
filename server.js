@@ -10,7 +10,7 @@ const db = knex({
     host : '127.0.0.1',
     user : 'postgres',
     password : '',
-    database : 'smartbrain'
+    database : 'smart5'
   }
 });
 
@@ -19,27 +19,6 @@ const db = knex({
 const app = express();
 app.use(bodyParser.json());
 app.use(cors()); 
-
-const database = {
-	users: [
-		{
-			id: '123',
-			name: 'john',
-			email: 'john@gmail.com',
-			password: 'cookies',
-			entries: 0,
-			joined: new Date()
-		},
-		{
-			id: '124',
-			name: 'sal',
-			email: 'sal@gmail.com',
-			password: 'apples',
-			entries: 0,
-			joined: new Date()
-		}
-	]
-}
 
 app.get('/', (req, res) => {
 	res.json(database.users);
