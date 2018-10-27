@@ -2,7 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const knex = require('knex');
-const bcrypt = require('bcrypt-nodejs');
+
+const app = express();
+app.use(bodyParser.json());
+app.use(cors()); 
+
 
 const register = require('./Controllers/register');
 const signin = require('./Controllers/signin');
@@ -18,10 +22,6 @@ const db = knex({
     database : 'smart5'
   }
 });
-
-const app = express(); 
-app.use(bodyParser.json());
-app.use(cors()); 
 
 app.get('/', (req, res) => { res.json('it is working!') });
 
