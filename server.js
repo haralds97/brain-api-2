@@ -4,6 +4,7 @@ const cors = require('cors');
 const knex = require('knex');
 const bcrypt = require('bcrypt-nodejs');
 
+
 const register = require('./Controllers/register');
 const signin = require('./Controllers/signin');
 const profile = require('./Controllers/profile');
@@ -29,6 +30,7 @@ app.post('/signin', (req, res) => { signin.handleSignin(req, res, db, bcrypt) })
 app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) })
 app.get('/profile/:id', (req, res) => { profile.handleProfileGet(req, res, db) })
 app.put('/image', (req, res) => { image.handleImage(req, res, db) })
+app.post('/imageUrl', (req, res) => { image.handleApiCall(req, res) })
 
 app.listen(3030, () => {
 	console.log('app is running on port 3030');
