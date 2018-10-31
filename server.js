@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const knex = require('knex');
+const bcrypt = require('bcrypt-nodejs');
 
 const app = express();
 app.use(bodyParser.json());
@@ -31,11 +32,6 @@ app.get('/profile/:id', (req, res) => { profile.handleProfileGet(req, res, db) }
 app.put('/image', (req, res) => { image.handleImage(req, res, db) })
 app.post('/imageUrl', (req, res) => { image.handleApiCall(req, res) })
 
-<<<<<<< HEAD
-
 app.listen(process.env.PORT || 3030, () => {
-=======
-app.listen(process.env.PORT, () => {
->>>>>>> 685422a18d1e39c33fb4822af87b58d53b468142
 	console.log(`app is running on port ${process.env.PORT}`);
 })
