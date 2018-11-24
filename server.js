@@ -12,10 +12,8 @@ const image = require('./Controllers/image');
 const db = knex({
   client: 'pg',
   connection: {
-    host : '127.0.0.1',
-    user : 'postgres',
-    password : '',
-    database : 'smart5'
+  	connectionString: process.env.DATABASE_URL,
+  	ssl: true
   }
 });
 
@@ -35,5 +33,6 @@ app.listen(process.env.PORT || 3030, () => {
 	console.log(`app is running on port ${process.env.PORT}`);
 })
 
-// glacial-plateau-39670
-// https://glacial-plateau-39670.herokuapp.com
+// glacial-plateau-39670 –--- backend app
+// https://glacial-plateau-39670.herokuapp.com –-- backend app full url
+// postgresql-closed-71027 ---- the database addon
